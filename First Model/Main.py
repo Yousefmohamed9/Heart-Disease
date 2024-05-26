@@ -9,14 +9,11 @@ model = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-	return render_template('main.html')
 
 
 @app.route('/predict', methods=['GET','POST'])
 def predict():
-    if request.method == 'POST':
+    if request.method == 'GET':
 
         age = int(request.form['Age'])
         sex = int(request.form.get('Sex'))
@@ -35,10 +32,14 @@ def predict():
         
         my_prediction = model.predict(data)
         
-        return render_template('result.html', prediction=my_prediction)
+        return int(my_prediction)
+    
+
         
         
 
+        
 if __name__ == '__main__':
 	app.run(debug=True,port=8000)
+    
 
