@@ -3,17 +3,20 @@ from flask import Flask, render_template, request
 import pickle
 import numpy as np
 
-# Load the Random Forest CLassifier model
+# Load the Regression CLassifier model
 filename = 'heart-disease-regression-model.pkl'
 model = pickle.load(open(filename, 'rb'))
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+	return render_template('main.html')
 
 
 @app.route('/predict', methods=['GET','POST'])
 def predict():
-    if request.method == 'GET':
+    if request.method == 'POST':
 
         age = int(request.form['Age'])
         sex = int(request.form.get('Sex'))
@@ -32,9 +35,7 @@ def predict():
         
         my_prediction = model.predict(data)
         
-        return int(my_prediction)
-    
-
+        return render_template("result.html", prediction=my_prediction)
         
         
 
